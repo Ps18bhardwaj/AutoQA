@@ -17,7 +17,7 @@ _BACKEND_ROOT = Path(__file__).resolve().parent
 def main() -> None:
     uvicorn.run(
         "app.api.main:app",
-        host="127.0.0.1",
+        host="0.0.0.0",
         port=8003,
         reload=True,
         reload_dirs=[str(_BACKEND_ROOT / "app")],
