@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AutoQA Demo — Shop</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; }
+    main { display: block; }
+    .item { display: flex; justify-content: space-between; padding: .5rem 0; border-bottom: 1px solid #eee; }
+    .total { font-weight: 700; margin-top: 1rem; font-size: 1.2rem; }
+    form { margin-top: 2rem; padding: 1rem; border: 1px solid #ddd; }
+    label { display: block; margin: .5rem 0 .2rem; }
+    input { padding: .4rem; width: 100%; box-sizing: border-box; }
+    button { margin-top: 1rem; padding: .5rem 1rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Demo Shop</h1>
+    <div class="item"><span>Widget</span><span>$5.00</span>
+      <button aria-label="Add Widget">Add to cart</button></div>
+    <div class="item"><span>Gadget</span><span>$8.00</span>
+      <button aria-label="Add Gadget">Add to cart</button></div>
+
+    <p class="total">Total: $<span id="total">0.00</span></p>
+    <p>Cart items: <span id="count">0</span></p>
+
+    <form id="checkout" action="/demo/api/checkout" method="post">
+      <h2>Checkout</h2>
+      <label for="name">Name</label>
+      <input id="name" name="name" type="text" autocomplete="name">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" autocomplete="email">
+      <button type="submit">Place order</button>
+    </form>
+  </main>
+
+  <script>
+    let count = 0;
+    document.querySelectorAll('button[aria-label^="Add"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        count += 1;
+        document.getElementById('count').textContent = count;
+        // PLANTED functional bug: the item count updates but the TOTAL never does.
+        // (A correct implementation would add the item price to #total here.)
+      });
+    });
+    // Prevent the checkout form from actually navigating (keeps the demo self-contained).
+    document.getElementById('checkout').addEventListener('submit', (e) => {
+      e.preventDefault();
+      document.querySelector('main').insertAdjacentHTML(
+        'beforeend', '<p id="confirmation">Order placed — thank you!</p>');
+    });
+  </script>
+</body>
+</html>

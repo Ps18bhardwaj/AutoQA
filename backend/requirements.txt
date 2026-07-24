@@ -1,0 +1,28 @@
+# AutoQA backend RUNTIME deps. Pins are the verified floor (2026-07-05); newer is fine.
+fastapi>=0.138.0
+uvicorn[standard]>=0.49.0
+pydantic>=2.13.4
+
+sqlalchemy>=2.0.0
+
+# Agent loop + durable checkpointing
+langgraph>=1.2.6
+langgraph-checkpoint-sqlite>=3.1.0
+aiosqlite>=0.20.0
+
+# Browser automation (async API only — sync API crashes inside FastAPI's loop)
+playwright>=1.61.0
+pillow>=10.4.0                   # bounding-box annotation on screenshots
+
+# Shared LLM router (vendored shared/llm.py) — decide node uses Gemini vision
+litellm>=1.89.3
+google-genai>=2.9.0
+groq>=1.5.0                      # router fallback chain support (text-only calls)
+
+# Checks
+httpx>=0.28.1                    # capped same-domain link HEAD checks
+
+# Observability
+langfuse>=4.9.1
+
+python-dotenv>=1.0.1

@@ -1,0 +1,182 @@
+{
+  "description": "AutoQA eval scenarios. Local /demo scenarios have deterministic ground truth (planted bugs) for precision/recall; saucedemo/the-internet scenarios test verdict accuracy and action success on real sites. `expected_findings` uses {category, keyword} matched against a finding's title+actual.",
+  "scenarios": [
+    {
+      "id": "demo-01-total-bug",
+      "category": "seeded-functional",
+      "url": "http://localhost:8003/demo/shop.html",
+      "scenario": "Add an item to the cart. The cart total must update to reflect the added item's price.",
+      "max_steps": 8,
+      "expected_verdict": "fail",
+      "expected_findings": [{"category": "functional", "keyword": "total"}]
+    },
+    {
+      "id": "demo-02-clean-control",
+      "category": "seeded-clean",
+      "url": "http://localhost:8003/demo/clean.html",
+      "scenario": "Confirm the main heading 'A Perfectly Healthy Page' is visible on this page. Do not navigate away from it.",
+      "max_steps": 5,
+      "expected_verdict": "pass",
+      "expected_findings": []
+    },
+    {
+      "id": "demo-03-inspect-all",
+      "category": "seeded-multi",
+      "url": "http://localhost:8003/demo/index.html",
+      "scenario": "Confirm the main heading 'AutoQA Demo Site' is visible on the home page.",
+      "max_steps": 6,
+      "expected_verdict": "pass",
+      "expected_findings": [
+        {"category": "broken-link", "keyword": "image"},
+        {"category": "console", "keyword": "planted"},
+        {"category": "network", "keyword": "does-not-exist"},
+        {"category": "a11y", "keyword": "contrast"}
+      ]
+    },
+    {
+      "id": "demo-07-checkout-approval",
+      "category": "seeded-approval",
+      "url": "http://localhost:8003/demo/shop.html",
+      "scenario": "Add an item, fill the checkout form with name Test User and email test@example.com, submit the order, and confirm it is placed.",
+      "max_steps": 10,
+      "expected_verdict": "pass",
+      "expected_findings": [],
+      "requires_approval": true
+    },
+    {
+      "id": "sauce-01-login-pass",
+      "category": "flow-pass",
+      "url": "https://www.saucedemo.com",
+      "scenario": "Log in as standard_user with password secret_sauce and confirm the inventory page loads (you should see 'Products' and 'Add to cart' buttons).",
+      "max_steps": 10,
+      "expected_verdict": "pass",
+      "expected_findings": []
+    },
+    {
+      "id": "sauce-02-cheapest-item",
+      "category": "flow-pass",
+      "url": "https://www.saucedemo.com",
+      "scenario": "Log in as standard_user / secret_sauce, add the cheapest item to the cart, and verify the cart badge shows 1.",
+      "max_steps": 12,
+      "expected_verdict": "pass",
+      "expected_findings": []
+    },
+    {
+      "id": "sauce-03-bad-credentials",
+      "category": "flow-fail",
+      "url": "https://www.saucedemo.com",
+      "scenario": "Log in as standard_user with the password wrong_password and confirm you reach the inventory page.",
+      "max_steps": 8,
+      "expected_verdict": "fail",
+      "expected_findings": [{"category": "functional", "keyword": "login"}]
+    },
+    {
+      "id": "sauce-04-locked-user",
+      "category": "flow-fail",
+      "url": "https://www.saucedemo.com",
+      "scenario": "Log in as locked_out_user with password secret_sauce and confirm you reach the inventory page.",
+      "max_steps": 8,
+      "expected_verdict": "fail",
+      "expected_findings": [{"category": "functional", "keyword": "login"}]
+    },
+    {
+      "id": "sauce-05-checkout-approval",
+      "category": "flow-approval",
+      "url": "https://www.saucedemo.com",
+      "scenario": "Log in as standard_user / secret_sauce, add any item to the cart, go to the cart, and proceed to checkout by clicking the checkout button.",
+      "max_steps": 14,
+      "expected_verdict": "pass",
+      "expected_findings": []
+    },
+    {
+      "id": "internet-01-login-pass",
+      "category": "flow-pass",
+      "url": "https://the-internet.herokuapp.com/login",
+      "scenario": "Log in with username tomsmith and password SuperSecretPassword! and confirm the secure area is reached (you should see 'You logged into a secure area').",
+      "max_steps": 10,
+      "expected_verdict": "pass",
+      "expected_findings": []
+    },
+    {
+      "id": "internet-02-login-fail",
+      "category": "flow-fail",
+      "url": "https://the-internet.herokuapp.com/login",
+      "scenario": "Log in with username tomsmith and password wrongpass and confirm the secure area is reached.",
+      "max_steps": 8,
+      "expected_verdict": "fail",
+      "expected_findings": [{"category": "functional", "keyword": "login"}]
+    },
+    {
+      "id": "internet-03-broken-images",
+      "category": "flow-broken-link",
+      "url": "https://the-internet.herokuapp.com/broken_images",
+      "scenario": "Check the page — every image on it should load correctly.",
+      "max_steps": 5,
+      "expected_verdict": "pass",
+      "expected_findings": [{"category": "broken-link", "keyword": "image"}]
+    },
+    {
+      "id": "internet-04-checkboxes",
+      "category": "flow-pass",
+      "url": "https://the-internet.herokuapp.com/checkboxes",
+      "scenario": "Check the first checkbox on the page and verify it becomes checked.",
+      "max_steps": 8,
+      "expected_verdict": "pass",
+      "expected_findings": []
+    },
+    {
+      "id": "internet-05-dropdown",
+      "category": "flow-pass",
+      "url": "https://the-internet.herokuapp.com/dropdown",
+      "scenario": "Select 'Option 2' from the dropdown and verify it is selected.",
+      "max_steps": 8,
+      "expected_verdict": "pass",
+      "expected_findings": []
+    },
+    {
+      "id": "internet-06-status-404",
+      "category": "flow-network",
+      "url": "https://the-internet.herokuapp.com/status_codes/404",
+      "scenario": "Load this page and report whether it returned an HTTP error status.",
+      "max_steps": 5,
+      "expected_verdict": "pass",
+      "expected_findings": [{"category": "network", "keyword": "404"}]
+    },
+    {
+      "id": "internet-07-basic-auth-blocked",
+      "category": "blocked",
+      "url": "https://the-internet.herokuapp.com/basic_auth",
+      "scenario": "Access the basic-auth protected page and confirm the protected content loads.",
+      "max_steps": 6,
+      "expected_verdict": "blocked",
+      "expected_findings": [{"category": "blocked", "keyword": "auth"}]
+    },
+    {
+      "id": "robust-01-unreachable",
+      "category": "robustness",
+      "url": "http://localhost:8003/demo/does-not-exist.html",
+      "scenario": "Open the page and verify the main heading is visible.",
+      "max_steps": 5,
+      "expected_verdict": "fail",
+      "expected_findings": []
+    },
+    {
+      "id": "robust-02-offdomain",
+      "category": "robustness",
+      "url": "http://localhost:8003/demo/index.html",
+      "scenario": "Navigate to https://www.google.com and search for something.",
+      "max_steps": 6,
+      "expected_verdict": "fail",
+      "expected_findings": []
+    },
+    {
+      "id": "robust-03-infinite-scroll",
+      "category": "robustness",
+      "url": "https://the-internet.herokuapp.com/infinite_scroll",
+      "scenario": "Scroll down the page a few times to load more content, then confirm additional paragraphs appeared.",
+      "max_steps": 8,
+      "expected_verdict": "pass",
+      "expected_findings": []
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Env / secrets
+.env
+*.env
+!.env.example
+
+# Node
+node_modules/
+dist/
+*.tsbuildinfo
+*.local
+
+# Runtime state
+autoqa.db*
+*.sqlite
+backend/runs/
+
+# Screenshots / scratch artifacts outside runs/
+*.png
+!backend/app/demo_site/img/*.png
+
+# Logs / dumps
+*.log
+*.err
+
+# OS
+.DS_Store
+Thumbs.db

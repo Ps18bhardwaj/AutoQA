@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+runs/
+*.db
+*.db-*
+*.sqlite
+tests/
+eval/results*.md
+scripts/smoke_screenshot.png
+scripts/ws_client_chunks/
+.pytest_cache/

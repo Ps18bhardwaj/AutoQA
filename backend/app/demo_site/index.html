@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AutoQA Demo — Home</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; }
+    /* PLANTED a11y bug: very low contrast text (fails axe color-contrast) */
+    .faint { color: #cfcfcf; background: #ffffff; }
+    nav a { margin-right: 1rem; }
+    img { max-width: 200px; display: block; margin: 1rem 0; }
+  </style>
+</head>
+<body>
+  <!-- PLANTED a11y bug: no <main> landmark, heading order jumps h1 -> h3 -->
+  <h1>AutoQA Demo Site</h1>
+  <nav aria-label="Main">
+    <a href="/demo/shop.html">Shop</a>
+    <a href="/demo/clean.html">Clean page</a>
+    <!-- PLANTED broken link: 404 -->
+    <a href="/demo/missing-page.html">Missing page</a>
+  </nav>
+
+  <h3>Welcome</h3>
+  <p>This page intentionally contains several planted bugs so AutoQA's checks have deterministic ground truth.</p>
+  <p class="faint">This faint text has insufficient colour contrast (planted accessibility bug).</p>
+
+  <!-- PLANTED broken image: src does not exist -->
+  <img src="/demo/img/does-not-exist.png" alt="A product photo that fails to load">
+
+  <!-- A working image (control) -->
+  <img src="/demo/img/ok.png" alt="A working placeholder image">
+
+  <button id="go">Load extra data</button>
+
+  <script>
+    // PLANTED console error (fires on load)
+    console.error("planted: analytics module failed to initialise");
+
+    // PLANTED failing network request (404 fetch) on button click
+    document.getElementById("go").addEventListener("click", () => {
+      fetch("/demo/api/does-not-exist").catch(() => {});
+    });
+    // Also fire one on load so a passive visit still sees the network bug
+    fetch("/demo/api/does-not-exist").catch(() => {});
+  </script>
+</body>
+</html>
